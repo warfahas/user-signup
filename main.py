@@ -62,28 +62,28 @@ class Index(webapp2.RequestHandler):
                     <td><label for="username">Username</label></td>
                     <td>
                         <input name="username" type="text" value="">
-                        <span class="error"></span>
+                        <span class="error" id="username"></span>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="password">Password</label></td>
                     <td>
                         <input name="password" type="password">
-                        <span class="error"></span>
+                        <span class="error" id="password"></span>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="verify">Verify Password</label></td>
                     <td>
                         <input name="verify" type="password">
-                        <span class="error"></span>
+                        <span class="error" id="verify"></span>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="email">Email (optional)</label></td>
                     <td>
                         <input name="email" type="email" value="">
-                        <span class="error"></span>
+                        <span class="error" id="email" ></span>
                     </td>
                 </tr>
             </table>
@@ -93,7 +93,7 @@ class Index(webapp2.RequestHandler):
         error = self.request.get("error")
         if error:
             error_esc = cgi.escape(error, quote=True)
-            error_element = '<span class="error">' + error_esc + '</span>'
+            error_element = '<span class="error" id="">' + error_esc + '</span>'
         else:
            error_element = ''
 
@@ -113,21 +113,17 @@ class Welcome(webapp2.RequestHandler):
         email = self.request.get('email')
 
         if not valid_username(username):
-
             error = "That's not a valid username."
             self.redirect("/?error=" + error)
 
         if not valid_password(password):
-
             error = "That wasn't a valid password."
             self.redirect("/?error=" + error)
         elif password != verify:
-
             error = "Your passwords didn't match."
             self.redirect("/?error=" + error)
 
         if not valid_email(email):
-
             error = "That's not a valid email."
             self.redirect("/?error=" + error)
 
