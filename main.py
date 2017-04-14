@@ -50,44 +50,19 @@ def valid_email(email):
     return not email or EMAIL_RE.match(email)
 
 class Index(webapp2.RequestHandler):
+    #Create a function for error.
+
     def get(self):
-        have_error = False
-        username = self.request.get('username')
-        password = self.request.get('password')
-        verify = self.request.get('verify')
-        email = self.request.get('email')
-
-        params = dict(username = username, email = email)
-
-        if not valid_username(username):
-            params["error_username"] = "That's not a valid username."
-            have_error = True
-
-        if not valid_password(password):
-            params["error_password"] = "That wasn't a valid password."
-            have_error = True
-        elif password != verify:
-            params["error_verify"] = "Your passwords didn't match."
-            have_error = True
-
-        if not valid_email(email):
-            params["error_email"] = "That's not a valid email."
-            have_error = True
-
-
-
-
-
         add_form = """
         <h1>Signup</h1>
-        <form method="post" action="/welcome">
+        <form method="post" action="/">
             <table>
                 <tr>
                     <td class="label">Username</td>
                     <td>
                         <input name="username" type="text" value="">
                     </td>
-                        <td class="error">%{error_username}
+                        <td class="error">{error.error_username}
                     </td>
                 </tr>
                 <tr>
@@ -95,7 +70,7 @@ class Index(webapp2.RequestHandler):
                     <td>
                         <input name="password" type="password">
                     </td>
-                        <td class="error">{error_password}
+                        <td class="error">{error.error_password}
                     </td>
                 </tr>
                 <tr>
@@ -103,7 +78,7 @@ class Index(webapp2.RequestHandler):
                     <td>
                         <input name="verify" type="password">
                     </td>
-                        <td class="error>{error_verify}
+                        <td class="error>{error.error_verify}
                     </td>
                 </tr>
                 <tr>
@@ -111,16 +86,49 @@ class Index(webapp2.RequestHandler):
                     <td>
                         <input name="email" type="email" value="">
                     </td>
-                        <td class="error">{error_email}
+                        <td class="error">{error.error_email}
                     </td>
                 </tr>
             </table>
             <input type="submit" value="Submit">
         </form>
-        """.format(params)
+        """.format(error)
+
+    def post(self):
+        have_error = False
+        username = self.request.get('username')
+        password = self.request.get('password')
+        verify = self.request.get('verify')
+        email = self.request.get('email')
+
+        error = {}
+
+        if not valid_username(username):
+            error["error_username"] = "That's not a valid username."
+            have_error = True
+
+
+        if not valid_password(password):
+            error["error_password"] = "That wasn't a valid password."
+            have_error = True
+
+        elif password != verify:
+            error["error_verify"] = "Your passwords didn't match."
+            have_error = True
+
+
+        if not valid_email(email):
+            error["error_email"] = "That's not a valid email."
+            have_error = True
+
+
+
+
+
+
 
         if have_error:
-            self.redirect("/", params)
+            self.redirect("/")
         else:
             self.redirect("/welcome?username=" + username)
 
