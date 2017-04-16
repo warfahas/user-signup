@@ -57,7 +57,7 @@ add_form = """
             <td>
                 <input name="username" type="text" value="">
             </td>
-                <td class="error" value="error_username">%(error_username)s
+                <td class="error">%(error_username)s
             </td>
         </tr>
         <tr>
@@ -65,7 +65,7 @@ add_form = """
             <td>
                 <input name="password" type="password">
             </td>
-                <td class="error" value="error_password">%(error_password)s
+                <td class="error">%(error_password)s
             </td>
         </tr>
         <tr>
@@ -73,7 +73,7 @@ add_form = """
             <td>
                 <input name="verify" type="password">
             </td>
-                <td class="error" value="error_verify">%(error_verify)s
+                <td class="error">%(error_verify)s
             </td>
         </tr>
         <tr>
@@ -81,7 +81,7 @@ add_form = """
             <td>
                 <input name="email" type="email" value="">
             </td>
-                <td class="error" value="error_email">%(error_email)s
+                <td class="error">%(error_email)s
             </td>
         </tr>
     </table>
@@ -106,30 +106,30 @@ class Index(webapp2.RequestHandler):
 
 
     def post(self):
-        
+
         username = self.request.get('username')
         password = self.request.get('password')
         verify = self.request.get('verify')
         email = self.request.get('email')
 
 
-
+        error = dict(username=username, password=password, verify=verify, email=email)
         if not valid_username(username):
-            error_username = self.write_form("That's not a valid username.")
+            error['error_username'] = self.write_form("That's not a valid username.")
 
 
 
         elif not valid_password(password):
-            error_password = self.write_form("That wasn't a valid password.")
+            error['error_password'] = self.write_form("That wasn't a valid password.")
 
 
         elif password != verify:
-            error_verify = self.write_form("Your passwords didn't match.")
+            error['error_verify'] = self.write_form("Your passwords didn't match.")
 
 
 
         elif not valid_email(email):
-            error_email = self.write_form("That's not a valid email.")
+            error['error_email'] = self.write_form("That's not a valid email.")
 
 
 
