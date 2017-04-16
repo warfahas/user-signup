@@ -106,7 +106,6 @@ class Index(webapp2.RequestHandler):
 
 
     def post(self):
-
         username = self.request.get('username')
         password = self.request.get('password')
         verify = self.request.get('verify')
@@ -119,8 +118,10 @@ class Index(webapp2.RequestHandler):
 
 
 
+
         elif not valid_password(password):
             error['error_password'] = self.write_form("That wasn't a valid password.")
+
 
 
         elif password != verify:
@@ -128,8 +129,10 @@ class Index(webapp2.RequestHandler):
 
 
 
+
         elif not valid_email(email):
             error['error_email'] = self.write_form("That's not a valid email.")
+
 
 
 
