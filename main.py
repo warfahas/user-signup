@@ -55,34 +55,30 @@ add_form = """
         <tr>
             <td class="label">Username</td>
             <td>
-                <input name="username" type="text" value="">
+                <input name="username" type="text" value="" required>
             </td>
-                <td class="error">%(error_username)s
-            </td>
+                <td class="error">%(error_username)s</td>
         </tr>
         <tr>
             <td class="label">Password</td>
             <td>
-                <input name="password" type="password">
+                <input name="password" type="password" required>
             </td>
-                <td class="error">%(error_password)s
-            </td>
+                <td class="error">%(error_password)s</td>
         </tr>
         <tr>
             <td class="label">Verify Password</td>
             <td>
-                <input name="verify" type="password">
+                <input name="verify" type="password" required>
             </td>
-                <td class="error">%(error_verify)s
-            </td>
+                <td class="error">%(error_verify)s</td>
         </tr>
         <tr>
             <td class="label">Email (optional)</td>
             <td>
                 <input name="email" type="email" value="">
             </td>
-                <td class="error">%(error_email)s
-            </td>
+                <td class="error">%(error_email)s</td>
         </tr>
     </table>
     <input type="submit" value="Submit">
@@ -93,7 +89,7 @@ add_form = """
 class Index(webapp2.RequestHandler):
 
     def write_form(self, error_username="", error_password="", error_verify="", error_email=""):
-        self.response.out.write(add_form % {"error_username": error_username, "error_password": error_password, "error_verify": error_verify, "error_email": error_email})
+        self.response.out.write(page_header + add_form % {"error_username": error_username, "error_password": error_password, "error_verify": error_verify, "error_email": error_email} + page_footer)
 
     def get(self):
         self.write_form()
