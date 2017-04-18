@@ -91,6 +91,7 @@ class Index(webapp2.RequestHandler):
     def write_form(self, error_username="", error_password="", error_verify="", error_email=""):
         self.response.out.write(page_header + add_form % {"error_username": error_username, "error_password": error_password, "error_verify": error_verify, "error_email": error_email} + page_footer)
 
+
     def get(self):
         self.write_form()
 
