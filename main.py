@@ -108,35 +108,17 @@ class Index(webapp2.RequestHandler):
         verify = self.request.get('verify')
         email = self.request.get('email')
 
-
         error = dict(username=username, password=password, verify=verify, email=email)
         if not valid_username(username):
             error['error_username'] = self.write_form("That's not a valid username.")
-
-
-
-
         elif not valid_password(password):
             error['error_password'] = self.write_form("That wasn't a valid password.")
-
-
-
         elif password != verify:
             error['error_verify'] = self.write_form("Your passwords didn't match.")
-
-
-
-
         elif not valid_email(email):
             error['error_email'] = self.write_form("That's not a valid email.")
-
-
-
-
         else:
             self.redirect("/welcome?username=" + username)
-
-
 
 
 class Welcome(webapp2.RequestHandler):
