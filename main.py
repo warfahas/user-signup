@@ -92,7 +92,7 @@ class Index(webapp2.RequestHandler):
         self.response.out.write(page_header + add_form % {"error_username": error_username, "error_password": error_password, "error_verify": error_verify, "error_email": error_email} + page_footer)
 
 
-    def get(self):
+    def get(self,):
         self.write_form()
 
 
