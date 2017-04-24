@@ -48,6 +48,7 @@ def valid_password(password):
 EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 def valid_email(email):
     return not email or EMAIL_RE.match(email)
+
 add_form = """
 <h1>Signup</h1>
 <form method="post" action="/">
@@ -57,28 +58,28 @@ add_form = """
             <td>
                 <input name="username" type="text" value="" required>
             </td>
-                <td class="error">%(error_username)s</td>
+            <td class="error">%(error_username)s</td>
         </tr>
         <tr>
             <td class="label">Password</td>
             <td>
                 <input name="password" type="password" required>
             </td>
-                <td class="error">%(error_password)s</td>
+            <td class="error">%(error_password)s</td>
         </tr>
         <tr>
             <td class="label">Verify Password</td>
             <td>
                 <input name="verify" type="password" required>
             </td>
-                <td class="error">%(error_verify)s</td>
+            <td class="error">%(error_verify)s</td>
         </tr>
         <tr>
             <td class="label">Email (optional)</td>
             <td>
                 <input name="email" type="email" value="">
             </td>
-                <td class="error">%(error_email)s</td>
+            <td class="error">%(error_email)s</td>
         </tr>
     </table>
     <input type="submit" value="Submit">
@@ -88,37 +89,53 @@ add_form = """
 
 class Index(webapp2.RequestHandler):
 
+
     def write_form(self, error_username="", error_password="", error_verify="", error_email=""):
         self.response.out.write(page_header + add_form % {"error_username": error_username, "error_password": error_password, "error_verify": error_verify, "error_email": error_email} + page_footer)
 
 
-    def get(self,):
+
+
+    def get(self):
         self.write_form()
 
-
-
-
-
-
-
-
     def post(self):
+        error = False
         username = self.request.get('username')
         password = self.request.get('password')
         verify = self.request.get('verify')
         email = self.request.get('email')
+        error_username = ""
+        error_password = ""
+        error_verify = ""
+        error_email = ""
 
-        error = dict(username=username, password=password, verify=verify, email=email)
+
         if not valid_username(username):
-            error['error_username'] = self.write_form("That's not a valid username.")
-        elif not valid_password(password):
-            error['error_password'] = self.write_form("That wasn't a valid password.")
+            error_username = "That's not a valid username."
+            error = True
+        if not valid_password(password):
+            error_password = "That wasn't a valid password."
+            error = True
         elif password != verify:
-            error['error_verify'] = self.write_form("Your passwords didn't match.")
-        elif not valid_email(email):
-            error['error_email'] = self.write_form("That's not a valid email.")
+            error_verify = "Your passwords didn't match."
+            error = True
+        if not valid_email(email):
+            error_email = "That's not a valid email."
+            error = True
+        if error:
+            self.write_form(error_username, error_password, error_verify, error_email)
+
         else:
             self.redirect("/welcome?username=" + username)
+
+
+
+
+
+
+
+
 
 
 class Welcome(webapp2.RequestHandler):
